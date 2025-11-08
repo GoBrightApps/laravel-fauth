@@ -1,9 +1,9 @@
 <p align="center">
     <p align="center">
         <a href="https://github.com/GoBrightApps/firebase-laravel-auth/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/firebase-laravel-auth/tests.yml?branch=main&label=tests&style=round-square"></a>
-        <a href="https://packagist.org/packages/GoBrightApps/firebase-laravel-auth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/GoBrightApps/firebase-laravel-auth"></a>
-        <a href="https://packagist.org/packages/GoBrightApps/firebase-laravel-auth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/GoBrightApps/firebase-laravel-auth"></a>
-        <a href="https://packagist.org/packages/GoBrightApps/firebase-laravel-auth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/firebase-laravel-auth"></a>
+        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/firebase-laravel-auth"></a>
+        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/firebase-laravel-auth"></a>
+        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/firebase-laravel-auth"></a>
     </p>
 </p>
 
