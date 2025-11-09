@@ -59,7 +59,7 @@ trait HasFauth
     public function fauthAttributes(array $attributes = []): array
     {
         /** @var array<string, mixed> */
-        return Arr::mapKeys(Arr::only($attributes, array_keys($this->fauth_mapping)), $this->fauth_mapping);
+        return Futils::mapKeys(Arr::only($attributes, array_keys($this->fauth_mapping)), $this->fauth_mapping);
     }
 
     /**
