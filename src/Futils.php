@@ -239,4 +239,38 @@ class Futils
             return $default;
         }
     }
+
+
+    /**
+     * Remap the keys of an array using a given mapping array.
+     *
+     * @template TItems of array
+     *
+     * @param  TItems  $input
+     * @param  array<string, string>  $map
+     * @return TItems
+     */
+    public static function mapKeys(array $input, array $map = [], bool $refresh = true): array
+    {
+        if ($map === []) {
+            /** @var TItems $input */
+            return $input;
+        }
+
+        /** @var iterable<string, mixed> $input */
+        $result = [];
+
+        foreach ($input as $key => $value) {
+            $newKey = $map[$key] ?? $key;
+
+            if (! $refresh && isset($map[$key]) && $newKey !== $key) {
+                $result[$key] = $value;
+            }
+
+            $result[$newKey] = $value;
+        }
+
+        /** @var TItems $result */
+        return $result;
+    }
 }
