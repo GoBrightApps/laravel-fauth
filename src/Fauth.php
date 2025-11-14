@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bright\Fauth;
 
-use Bright\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -303,9 +302,12 @@ class Fauth
     /**
      * Search Firebase users by keyword.
      *
+     * @param  mixed  $search
+     * @param  int  $offset
+     * @param  int  $limit
      * @return Collection<int, UserRecord>
      */
-    public function search(?string $search = null, int $offset = 0, int $limit = 10): Collection
+    public function search($search = null, $offset = 0, $limit = 10, bool $cache = true): Collection
     {
         $callback = function () use ($search, $offset, $limit) {
             /** @var array{ offset: int<0, max>, limit: int<1, max> } $query */
@@ -323,6 +325,10 @@ class Fauth
                 default => false,
             })->values();
         };
+
+        if (! $cache) {
+            return $callback();
+        }
 
         $cacheKey = Futils::cacheKey(__METHOD__, [$search, $limit, $offset]);
 
