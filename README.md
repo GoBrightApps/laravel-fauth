@@ -1,10 +1,8 @@
 <p align="center">
-    <p align="center">
-        <a href="https://github.com/GoBrightApps/firebase-laravel-auth/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/firebase-laravel-auth/tests.yml?branch=main&label=tests&style=round-square"></a>
-        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/firebase-laravel-auth"></a>
-        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/firebase-laravel-auth"></a>
-        <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/firebase-laravel-auth"></a>
-    </p>
+    <a href="https://github.com/GoBrightApps/firebase-laravel-auth/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/firebase-laravel-auth/tests.yml?branch=main&label=tests&style=round-square"></a>
+    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/firebase-laravel-auth"></a>
+    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/firebase-laravel-auth"></a>
+    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/firebase-laravel-auth"></a>
 </p>
 
 # Firebase Laravel auth provider
@@ -15,12 +13,11 @@ It integrates kreait/laravel-firebase with Laravel’s authentication system —
 
 With the package you can create, authenticate, update, or delete Firebase users directly through Laravel’s model (e.g User model) — without worrying about SDK boilerplate or manual API handling.
 
-
 > **Note** This package built **on top of** the [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase). Make sure you have it installed and configured.
 
 ## Installation
 
-Before installation this package install and setup the `kreait/laravel-firebase`  If you don’t have it yet.
+Before installation this package install and setup the `kreait/laravel-firebase` If you don’t have it yet.
 
 ```bash
 composer require bright/firebase-laravel-auth
@@ -36,9 +33,10 @@ class User extends Model {
     use HasFauth;
 }
 ```
+
 This keeps your Laravel users in sync with Firebase — handling create, update, and delete actions seamlessly.
 
-Next: Tell Laravel to use the **fauth** driver for your user provider.
+Next: Tell Laravel to use the **fauth** driver for user auth provider.
 
 ```php
 // config/auth.php
@@ -52,6 +50,7 @@ Next: Tell Laravel to use the **fauth** driver for your user provider.
 ```
 
 #### User model configuration
+
 ```php
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -77,7 +76,7 @@ class User extends Authenticatable
 
     /**
      * The Fauth attribute key mappings between the local model and Firebase.
-     * 
+     *
      * Firebase fillable + mapping keys
      *
      * @var array<string, string>
@@ -93,13 +92,21 @@ class User extends Authenticatable
         'password' => 'password',
         'emailVerified' => 'emailVerified',
     ];
+
+    /**
+     * (Optional) Get the fauth key name.
+     */
+    public function getFauthKeyName(): string
+    {
+        return 'uid';
+    }
 }
 ```
 
-Nothing else to publish. The package’s service provider is auto-discovered 
-If not use `Bright\Fauth\ServiceProvider`. in laravel providers
+Nothing else to publish. The package’s service provider is auto-discovered
+If not then use `Bright\Fauth\ServiceProvider`. in laravel providers
 
-The ServiceProvider register `Fauth` facade and fauth auth driver
+The ServiceProvider register `Fauth` facade and `fauth` auth driver
 
 ## Quick Usage
 
@@ -223,7 +230,7 @@ $bye = $fauth->delete($new->uid);      // bool
 
 \Bright\Fauth\Futils::message('USER_DISABLED'); // results: The user account has been disabled.
 
-// Example 
+// Example
 \Bright\Fauth\Futils::message($e->getMessage());
 ```
 
@@ -312,6 +319,4 @@ PRs and issues are welcome! Keep it Laravel-friendly:
 
 ## License
 
-MIT
-# firebase-laravel-auth
-
+MIT License © [Bright](https://bright.it)
