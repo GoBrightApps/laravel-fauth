@@ -20,7 +20,7 @@ it('boot() registers the fauth user provider driver', function () {
     config([
         'auth.providers.fauth' => [
             'driver' => 'fauth',
-            'model' => \Illuminate\Foundation\Auth\User::class,
+            'model' => Illuminate\Foundation\Auth\User::class,
         ],
     ]);
 
@@ -37,7 +37,7 @@ it('auth provider resolves with model from config', function () {
     config([
         'auth.providers.fauth' => [
             'driver' => 'fauth',
-            'model' => \Illuminate\Foundation\Auth\User::class,
+            'model' => Illuminate\Foundation\Auth\User::class,
         ],
     ]);
 

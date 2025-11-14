@@ -125,13 +125,13 @@ it('message/reset/verify & auth-like helpers behave simply', function () {
     expect($this->fake->sendResetLink('me@ex.com'))->toBe('RESET_LINK_SENT');
 
     // verification email just records a call
-    $model = new class extends \Illuminate\Database\Eloquent\Model
+    $model = new class extends Illuminate\Database\Eloquent\Model
     {
+        public $timestamps = false;
+
         protected $fillable = ['uid', 'email'];
 
         protected $attributes = ['uid' => 'v1', 'email' => 'v@ex.com'];
-
-        public $timestamps = false;
     };
     $this->fake->sendVerificationEmail(new $model);
     $this->fake->assertCalled('sendVerificationEmail');

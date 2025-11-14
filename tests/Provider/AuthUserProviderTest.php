@@ -19,13 +19,13 @@ use Illuminate\Support\Facades\Schema;
 */
 class FakeUser extends Model implements Authenticatable
 {
-    use \Illuminate\Auth\Authenticatable;
+    use Illuminate\Auth\Authenticatable;
+
+    public $timestamps = true;
 
     protected $fillable = ['uid', 'email', 'password', 'remember_token', 'disabled'];
 
     protected $table = 'fake_users';
-
-    public $timestamps = true;
 }
 
 /*

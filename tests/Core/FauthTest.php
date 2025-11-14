@@ -191,13 +191,13 @@ it('sendResetLink returns a success string', function () {
 });
 
 it('sendVerificationEmail is a no-op but records the call', function () {
-    $model = new class extends \Illuminate\Database\Eloquent\Model
+    $model = new class extends Illuminate\Database\Eloquent\Model
     {
+        public $timestamps = false;
+
         protected $fillable = ['uid', 'email'];
 
         protected $attributes = ['uid' => 'v1', 'email' => 'v@ex.com'];
-
-        public $timestamps = false;
     };
 
     $returned = $this->fauth->sendVerificationEmail(new $model);
