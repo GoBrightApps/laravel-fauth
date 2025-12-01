@@ -12,7 +12,6 @@ use Kreait\Firebase\Auth\UserRecord;
 
 trait HasFauth
 {
-    use HasAttributeAccessor;
     use InteractsWithFauth;
 
     /**

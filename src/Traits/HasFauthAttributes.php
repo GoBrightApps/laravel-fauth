@@ -6,7 +6,7 @@ namespace Bright\Fauth\Traits;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-trait HasAttributeAccessor
+trait HasFauthAttributes
 {
     /**
      * Get the user's full name.

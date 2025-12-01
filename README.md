@@ -30,7 +30,7 @@ Use the `HasFauth` trait in your User model to automatically sync user data with
 ```php
 class User extends Model {
 
-    use HasFauth;
+    use HasFauth, HasFauthAttributes;
 }
 ```
 
@@ -56,7 +56,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFauth;
+    use HasFauth, HasFauthAttributes;
 
     /**
      * The attributes are fillable in database + firebase.
