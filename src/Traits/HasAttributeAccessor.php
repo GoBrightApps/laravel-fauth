@@ -57,18 +57,6 @@ trait HasAttributeAccessor
     }
 
     /**
-     * Get the user's status.
-     *
-     * @return Attribute<bool, never>
-     */
-    protected function status(): Attribute
-    {
-        return Attribute::make(
-            get: fn (): bool => ! ((bool) $this->getFauthValue('status'))
-        );
-    }
-
-    /**
      * Get the user's options.
      *
      * @return Attribute<array, never>

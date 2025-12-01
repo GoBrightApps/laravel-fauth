@@ -68,10 +68,10 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'status',
         'avatar',
         'options',
         'password',
+        'disabled',
     ];
 
     /**
@@ -86,7 +86,6 @@ class User extends Authenticatable
         'email' => 'email',
         'phone' => 'phoneNumber',
         'avatar' => 'photoURL',
-        'status' => 'disabled',
         'options' => 'customClaims',
         'disabled' => 'disabled',
         'password' => 'password',

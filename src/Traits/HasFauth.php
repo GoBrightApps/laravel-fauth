@@ -25,7 +25,6 @@ trait HasFauth
         'email' => 'email',
         'phone' => 'phoneNumber',
         'avatar' => 'photoURL',
-        'status' => 'disabled',
         'options' => 'customClaims',
         'disabled' => 'disabled',
         'password' => 'password',
