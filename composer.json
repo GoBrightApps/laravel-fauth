@@ -1,16 +1,14 @@
 {
     "name": "bright/laravel-fauth",
-    "description": "The Firebase auth package providing an authentication layer for Laravel.",
+    "description": "The package provides a Firebase-based authentication layer for Laravel.",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "auth",
         "fauth",
         "bright",
-        "authentication",
-        "firebase",
-        "firebase-laravel",
-        "firebase-laravel-auth"
+        "firebase-auth",
+        "laravel-fauth",
+        "authentication"
     ],
     "require": {
         "php": "^8.2.0",
