@@ -87,11 +87,6 @@ trait HasFauth
     public function loadFauth(): void
     {
         $this->loadFauthData();
-
-        // Optionally sync Firebase data into Eloquent attributes:
-        // foreach ($this->fauth_mapping as $local => $remote) {
-        //     $this->setAttribute($local, data_get($this->fauth_data, $remote));
-        // }
     }
 
     /**
@@ -107,23 +102,25 @@ trait HasFauth
 
         static::saving(static function (self $model): void {
 
-            /** @var array<string, mixed> $attributes */
-            $attributes = $model->getDirty();
+            /** @var array<string, mixed> $dirty */
+            $dirty = $model->getDirty();
 
             $fauthKey = $model->getAttribute($model->getFauthKeyName());
             $fauthKey = is_string($fauthKey) ? $fauthKey : null;
 
-            $fauth = Fauth::upsert($fauthKey, $model->fauthAttributes($attributes));
+            $fauth = Fauth::upsert($fauthKey, $model->fauthAttributes($dirty));
             $model->fauth_data = $fauth;
 
             if ($fauthKey !== $fauth->uid) {
-                $attributes[$model->getFauthKeyName()] = $fauth->uid;
+                $dirty[$model->getFauthKeyName()] = $fauth->uid;
             }
 
-            // Exclude Firebase-managed attributes from local persistence.
-            $model->setRawAttributes(Arr::except($attributes, array_keys($model->fauth_mapping)));
+            // Preserve full in-memory attributes, overlay dirty values
+            $raw = array_merge($model->getAttributes(), $dirty);
 
-            // Clear the Firebase cache entry.
+            // Exclude Firebase-managed attributes from local persistence without wiping other attributes
+            $model->setRawAttributes(Arr::except($raw, array_keys($model->fauth_mapping)));
+
             Cache::forget(Futils::userCacheKey($fauthKey));
         });
 
