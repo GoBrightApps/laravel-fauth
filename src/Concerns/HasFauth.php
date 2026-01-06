@@ -20,13 +20,13 @@ trait HasFauth
      * @var array<string, string>
      */
     protected array $fauth_mapping = [
-        'name'          => 'displayName',
-        'email'         => 'email',
-        'phone'         => 'phoneNumber',
-        'avatar'        => 'photoURL',
-        'options'       => 'customClaims',
-        'disabled'      => 'disabled',
-        'password'      => 'password',
+        'name' => 'displayName',
+        'email' => 'email',
+        'phone' => 'phoneNumber',
+        'avatar' => 'photoURL',
+        'options' => 'customClaims',
+        'disabled' => 'disabled',
+        'password' => 'password',
         'emailVerified' => 'emailVerified',
     ];
 
@@ -108,7 +108,7 @@ trait HasFauth
             $fauthKey = $model->getAttribute($model->getFauthKeyName());
             $fauthKey = is_string($fauthKey) ? $fauthKey : null;
 
-            $fauth             = Fauth::upsert($fauthKey, $model->fauthAttributes($dirty));
+            $fauth = Fauth::upsert($fauthKey, $model->fauthAttributes($dirty));
             $model->fauth_data = $fauth;
 
             if ($fauthKey !== $fauth->uid) {

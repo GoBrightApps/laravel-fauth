@@ -37,7 +37,7 @@ trait InteractsWithFauth
     {
         $callback = static function () use ($email): ?self {
             $record = Fauth::findByEmail($email);
-            $uid    = $record ? $record->uid : null;
+            $uid = $record ? $record->uid : null;
 
             return $uid ? static::findByUid($uid) : null;
         };
