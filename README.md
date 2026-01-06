@@ -1,57 +1,60 @@
+# Fauth - Firebase Authentication for Laravel
+
 <p align="center">
-    <a href="https://github.com/GoBrightApps/firebase-laravel-auth/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/firebase-laravel-auth/tests.yml?branch=main&label=tests&style=round-square"></a>
-    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/firebase-laravel-auth"></a>
-    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/firebase-laravel-auth"></a>
-    <a href="https://packagist.org/packages/bright/firebase-laravel-auth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/firebase-laravel-auth"></a>
+    <a href="https://github.com/GoBrightApps/fauth/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/fauth/tests.yml?branch=main&label=tests&style=round-square"></a>
+    <a href="https://packagist.org/packages/bright/fauth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/fauth"></a>
+    <a href="https://packagist.org/packages/bright/fauth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/fauth"></a>
+    <a href="https://packagist.org/packages/bright/fauth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/fauth"></a>
 </p>
 
-# Firebase Laravel auth provider
+## Overview
 
-The Firebase Laravel auth package provides a clean authentication layer for Firebase in Laravel.
+Fauth provides a seamless Firebase Authentication integration for Laravel applications. Built on top of [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase), it allows you to use Firebase as a native Laravel authentication provider with full support for user management, password handling, and comprehensive testing utilities.
 
-It integrates kreait/laravel-firebase with Laravel’s authentication system — allowing you to use Firebase as a native auth provider, complete with user management, password handling, and test fakes.
+### Key Features
 
-With the package you can create, authenticate, update, or delete Firebase users directly through Laravel’s model (e.g User model) — without worrying about SDK boilerplate or manual API handling.
+- **Native Laravel Integration** - Works seamlessly with Laravel's authentication system
+- **Eloquent Model Sync** - Automatically synchronizes your User models with Firebase
+- **Full User Management** - Create, read, update, and delete Firebase users
+- **Password & Email Operations** - Handle password resets and email verifications
+- **Testing Support** - Built-in fakes for testing without Firebase API calls
+- **Zero Configuration** - Auto-discovery and sensible defaults
 
-> **Note** This package built **on top of** the [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase). Make sure you have it installed and configured.
+## Requirements
+
+- PHP 8.1 or higher
+- Laravel 10.x or 11.x
+- [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase) installed and configured
 
 ## Installation
 
-Before installation this package install and setup the `kreait/laravel-firebase` If you don’t have it yet.
+### Step 1: Install Dependencies
+
+First, ensure you have `kreait/laravel-firebase` installed and configured. If not, install it first:
 
 ```bash
-composer require bright/firebase-laravel-auth
+composer require kreait/laravel-firebase
 ```
 
-## Configuration (Auth Provider)
+Then install Fauth:
 
-Use the `HasFauth` trait in your User model to automatically sync user data with Firebase.
-
-```php
-class User extends Model {
-
-    use HasFauth, HasFauthAttributes;
-}
+```bash
+composer require bright/fauth
 ```
 
-This keeps your Laravel users in sync with Firebase — handling create, update, and delete actions seamlessly.
+The package will be auto-discovered by Laravel.
 
-Next: Tell Laravel to use the **fauth** driver for user auth provider.
+### Step 2: Configure Your User Model
 
-```php
-// config/auth.php
-
-'providers' => [
-    'users' => [
-        'driver' => 'fauth',                   // 👈 use the fauth driver
-        'model'  => App\Models\User::class,    // your Eloquent User model
-    ],
-],
-```
-
-#### User model configuration
+Add the required traits to your User model:
 
 ```php
+<?php
+
+namespace App\Models;
+
+use Bright\Fauth\Traits\HasFauth;
+use Bright\Fauth\Traits\HasFauthAttributes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -59,41 +62,41 @@ class User extends Authenticatable
     use HasFauth, HasFauthAttributes;
 
     /**
-     * The attributes are fillable in database + firebase.
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
-        'uid', // required in database | Get the key by getFauthKeyName()
-
-        // fauth attributes (The fields doesn't touch database) mapped by: $fauth_mapping
-        'name',
-        'email',
-        'phone',
-        'avatar',
-        'options',
-        'password',
-        'disabled',
+        'uid',          // Required: Firebase UID (stored in database)
+        'name',         // Fauth attribute (synced with Firebase)
+        'email',        // Fauth attribute
+        'phone',        // Fauth attribute
+        'avatar',       // Fauth attribute
+        'password',     // Fauth attribute
+        'disabled',     // Fauth attribute
+        'options',      // Fauth attribute (custom claims)
     ];
 
     /**
-     * The Fauth attribute key mappings between the local model and Firebase.
-     *
-     * Firebase fillable + mapping keys
+     * Map local attributes to Firebase fields.
      *
      * @var array<string, string>
      */
     protected array $fauth_mapping = [
-        'name' => 'displayName',
-        'email' => 'email',
-        'phone' => 'phoneNumber',
-        'avatar' => 'photoURL',
-        'options' => 'customClaims',
-        'disabled' => 'disabled',
-        'password' => 'password',
+        'name'          => 'displayName',
+        'email'         => 'email',
+        'phone'         => 'phoneNumber',
+        'avatar'        => 'photoURL',
+        'password'      => 'password',
+        'disabled'      => 'disabled',
+        'options'       => 'customClaims',
         'emailVerified' => 'emailVerified',
     ];
 
     /**
-     * (Optional) Get the fauth key name.
+     * Get the Firebase UID column name.
+     *
+     * @return string
      */
     public function getFauthKeyName(): string
     {
@@ -102,158 +105,225 @@ class User extends Authenticatable
 }
 ```
 
-Nothing else to publish. The package’s service provider is auto-discovered
-If not then use `Bright\Fauth\ServiceProvider`. in laravel providers
+### Step 3: Configure Authentication Provider
 
-The ServiceProvider register `Fauth` facade and `fauth` auth driver
+Update your `config/auth.php` to use the Fauth driver:
 
-## Quick Usage
+```php
+'providers' => [
+    'users' => [
+        'driver' => 'fauth',
+        'model' => App\Models\User::class,
+    ],
+],
+```
 
-The `Fauth` facade provides a clean, zero-config API to interact with Firebase Auth.
+## Usage
 
-### Finding a user
+### Finding Users
+
+Retrieve Firebase users by UID, email, or phone number:
 
 ```php
 use Bright\Fauth\Facades\Fauth;
 
-$user = Fauth::find('uid_123');                // Find by UID
-$byEmail = Fauth::findByEmail('dev@demo.com'); // Find by email
-$byPhone = Fauth::findByPhone('+15551234567'); // Find by phone
+// Find by UID
+$user = Fauth::find('firebase_uid_123');
+
+// Find by email
+$user = Fauth::findByEmail('user@example.com');
+
+// Find by phone
+$user = Fauth::findByPhone('+15551234567');
 ```
 
-Each of these returns a Kreait\Firebase\Auth\UserRecord instance or null if the user doesn’t exist.
+All methods return a `Kreait\Firebase\Auth\UserRecord` instance or `null` if not found.
 
-### Authenticating Users
+### Authentication
+
+Verify user credentials or perform full authentication:
 
 ```php
-$valid = Fauth::check('dev@site.com', 'password123');  // returns bool
+// Check credentials (returns boolean)
+$isValid = Fauth::check('user@example.com', 'password123');
 
-// Full sign-in and fetch user
+// Authenticate and retrieve user
 $user = Fauth::attempt([
-    'email'    => 'dev@site.com',
+    'email'    => 'user@example.com',
     'password' => 'password123',
 ]);
 
+if ($user) {
+    // Authentication successful
+    // $user is a UserRecord instance
+}
 ```
 
-If authentication succeeds, attempt() returns a UserRecord; otherwise null.
+### Creating Users
 
-### Managing Accounts
+Create new Firebase users with optional custom claims:
 
 ```php
-// Create a user
 $user = Fauth::create([
-    'email'    => 'new@site.com',
-    'password' => 'secret',
-    'options'  => ['role' => 'admin'],
+    'email'    => 'newuser@example.com',
+    'password' => 'securePassword123',
+    'name'     => 'John Doe',
+    'options'  => ['role' => 'admin', 'department' => 'IT'],
 ]);
-
-// Update existing
-$updated = Fauth::update($user->uid, [
-    'displayName' => 'New Display Name',
-]);
-
-// Enable/Disable user
-Fauth::disabled($user->uid);
-Fauth::enabled($user->uid);
-
-// Update or create automatically
-$record = Fauth::upsert($user->uid, ['email' => 'changed@site.com']);
-
-// Delete single or multiple
-Fauth::delete($user->uid);
-Fauth::delete(['uid_1', 'uid_2']);
-
-// Delete all Firebase users
-$total = Fauth::deleteAllUsers();
 ```
 
-#### Searching & Querying
+### Updating Users
+
+Update existing user information:
 
 ```php
-$users = Fauth::all(); // Collection of all users
+$updatedUser = Fauth::update('firebase_uid_123', [
+    'name'   => 'Jane Smith',
+    'email'  => 'jane.smith@example.com',
+    'avatar' => 'https://example.com/avatar.jpg',
+]);
+```
+
+### Upsert Operations
+
+Create a user if they don't exist, or update if they do:
+
+```php
+$user = Fauth::upsert('firebase_uid_123', [
+    'email' => 'user@example.com',
+    'name'  => 'Updated Name',
+]);
+```
+
+### Enabling and Disabling Users
+
+Control user account status:
+
+```php
+// Disable user account
+Fauth::disabled('firebase_uid_123');
+
+// Enable user account
+Fauth::enabled('firebase_uid_123');
+```
+
+### Deleting Users
+
+Remove users from Firebase:
+
+```php
+// Delete single user
+Fauth::delete('firebase_uid_123');
+
+// Delete multiple users
+Fauth::delete(['uid_1', 'uid_2', 'uid_3']);
+
+// Delete all users (use with caution!)
+$totalDeleted = Fauth::deleteAllUsers();
+```
+
+### Querying Users
+
+Retrieve and search through Firebase users:
+
+```php
+// Get all users
+$users = Fauth::all();
+
+// Count total users
 $count = Fauth::count();
 
-$query = Fauth::query(['limit' => 50]); // Custom query
-$found = Fauth::search('example');      // Search by name/email
+// Custom query with options
+$users = Fauth::query(['limit' => 50]);
+
+// Search by name or email
+$results = Fauth::search('john');
 ```
 
-The methods return Laravel Collection instances of UserRecord objects.
+All methods return Laravel `Collection` instances containing `UserRecord` objects.
 
-### Passwords and Emails
+### Password Management
+
+Handle password operations securely:
 
 ```php
-// Change user password
-Fauth::updatePassword('dev@site.com', 'newPassword123');
+// Update user password
+Fauth::updatePassword('user@example.com', 'newSecurePassword123');
 
-// Send password reset link
-Fauth::sendResetLink('dev@site.com');
+// Send password reset email
+Fauth::sendResetLink('user@example.com');
 
-// Send verification email
+// Send email verification
 Fauth::sendVerificationEmail($user);
 ```
 
-### Fauth without Facade
+### Using Fauth Without Facade
+
+If you prefer dependency injection or need more control:
 
 ```php
 use Bright\Fauth\Fauth;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
-/** @var Fauth $fauth */
-$fauth = new Bright\Fauth\Fauth(\Kreait\Laravel\Firebase\Facades\Firebase::auth());
+$fauth = new Fauth(Firebase::auth());
 
-// Find by UID / email / phone
-$u  = $fauth->find('uid_123');
-$ue = $fauth->findByEmail('dev@example.com');
-$up = $fauth->findByPhone('+1555123456');
-
-// Sign-in style helpers
-$ok = $fauth->check('dev@example.com', 'secret');                 // bool
-$me = $fauth->attempt(['email' => 'dev@example.com', 'password' => 'secret']); // ?UserRecord
-
-// Create / update
-$new = $fauth->create(['email' => 'new@example.com', 'options' => ['role' => 'admin']]);
-$upd = $fauth->update($new->uid, ['displayName' => 'New Name']);
-
-// Upsert / delete
-$u2  = $fauth->upsert($new->uid, ['email' => 'new2@example.com']);
-$bye = $fauth->delete($new->uid);      // bool
+// Use all available methods
+$user = $fauth->find('uid_123');
+$isValid = $fauth->check('user@example.com', 'password');
 ```
 
-## Error handling
+## Error Handling
 
--   Many operations return `null` on failure or throw a Laravel `ValidationException`.
--   Use `message($code, $default)` to map Firebase error codes to a human-readable string.
+Fauth provides helpful error messages for Firebase operations:
 
 ```php
-\Bright\Fauth\Futils::message('error code');
+use Bright\Fauth\Futils;
 
-\Bright\Fauth\Futils::message('USER_DISABLED'); // results: The user account has been disabled.
-
-// Example
-\Bright\Fauth\Futils::message($e->getMessage());
+try {
+    $user = Fauth::create(['email' => 'invalid-email']);
+} catch (\Exception $e) {
+    // Get human-readable error message
+    $message = Futils::message($e->getMessage());
+    
+    // Example output: "The user account has been disabled."
+    $disabledMessage = Futils::message('USER_DISABLED');
+}
 ```
+
+Common error codes include:
+- `USER_DISABLED` - The user account has been disabled
+- `EMAIL_EXISTS` - The email address is already in use
+- `INVALID_PASSWORD` - The password is invalid
+- `USER_NOT_FOUND` - No user found with the provided identifier
 
 ## Testing
 
-Fake Mode for Testing
+Fauth includes comprehensive testing utilities that allow you to test authentication flows without making actual Firebase API calls.
 
-You can replace the real Firebase client with a fake version instantly:
+### Using FauthFake
+
+The simplest way to test is using the built-in fake:
 
 ```php
-Fauth::fake(); // swaps FauthFake to avoid hitting Firebase in tests
+use Bright\Fauth\Facades\Fauth;
 
-Fauth::create(['uid' => 't1', 'email' => 'fake@local']);
+test('user creation works', function () {
+    Fauth::fake();
 
-Fauth::assertCalled('create');
+    $user = Fauth::create([
+        'uid'   => 'test_uid_1',
+        'email' => 'test@example.com',
+    ]);
 
-//... the test assert here
+    expect($user)->not->toBeNull();
+    
+    Fauth::assertCalled('create');
+});
 ```
 
-This swaps in a Bright\Fauth\FauthFake instance — all calls are recorded but no real API requests are made.
+### Overriding the Binding
 
-### Easiest: override the binding
-
-Use the built-in **`FauthFake`** to avoid hitting Firebase in tests.
+For more control, override the service container binding:
 
 ```php
 use Bright\Fauth\FauthFake;
@@ -262,60 +332,192 @@ beforeEach(function () {
     $this->app->singleton('fauth', fn () => new FauthFake());
 });
 
-it('creates and finds a user', function () {
-    $fauth = app('fauth'); // FauthFake
+test('finds created user', function () {
+    $fauth = app('fauth');
 
-    $created = $fauth->create(['uid' => 'u1', 'email' => 'a@ex.com']);
-    $found   = $fauth->find('u1');
+    $fauth->create(['uid' => 'u1', 'email' => 'user@example.com']);
+    $found = $fauth->find('u1');
 
-    expect($found?->email)->toBe('a@ex.com');
+    expect($found->email)->toBe('user@example.com');
 });
 ```
 
-### Testing multiple operations
+### Testing Multiple Operations
 
-You can easily test multiple authentication-related features without touching Firebase:
+Test complex authentication workflows:
 
 ```php
-it('can create, update, and delete a user', function () {
-    $input = ['email' => 'user@example.com'];
+use Bright\Fauth\FauthFake;
+use Kreait\Firebase\Auth\UserRecord;
+
+test('full user lifecycle', function () {
+    $email = 'user@example.com';
     $uid = 'user_123';
-    $user = FauthFake::userRecord($uid, $input);
+    $userData = ['email' => $email];
+    
+    $user = FauthFake::userRecord($uid, $userData);
 
-    Fauth::shouldReceive('create')->once()->with($input)->andReturn($user);
-    Fauth::shouldReceive('update')->once()->with($uid, $input)->andReturn($user);
-    Fauth::shouldReceive('delete')->once()->with([$uid])->andReturnTrue();
+    Fauth::shouldReceive('create')
+        ->once()
+        ->with($userData)
+        ->andReturn($user);
 
-    expect(Fauth::create($input))->toBeInstanceOf(UserRecord::class);
-    expect(Fauth::update($uid, $input))->toBeInstanceOf(UserRecord::class);
-    expect(Fauth::delete([$uid]))->toBeTrue();
+    Fauth::shouldReceive('update')
+        ->once()
+        ->with($uid, $userData)
+        ->andReturn($user);
+
+    Fauth::shouldReceive('delete')
+        ->once()
+        ->with([$uid])
+        ->andReturnTrue();
+
+    // Test creation
+    $created = Fauth::create($userData);
+    expect($created)->toBeInstanceOf(UserRecord::class);
+
+    // Test update
+    $updated = Fauth::update($uid, $userData);
+    expect($updated)->toBeInstanceOf(UserRecord::class);
+
+    // Test deletion
+    $deleted = Fauth::delete([$uid]);
+    expect($deleted)->toBeTrue();
 });
-
 ```
 
-### Test assert recorded calls
+### Asserting Method Calls
 
-`FauthFake` records calls so you can assert behavior:
+Verify that specific methods were called during tests:
 
 ```php
-$fauth->sendVerificationEmail($user);
-$fauth->assertCalled('sendVerificationEmail');
+test('sends verification email', function () {
+    Fauth::fake();
+    
+    $user = Fauth::create(['email' => 'test@example.com']);
+    Fauth::sendVerificationEmail($user);
+
+    Fauth::assertCalled('sendVerificationEmail');
+});
 ```
 
-## Security & Production Notes
+## Security Considerations
 
--   Keep your Firebase Admin credentials safe (`FIREBASE_CREDENTIALS`).
--   This package assumes you’ve **correctly configured** [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase).
--   In production, prefer caching where available (e.g. `findMany()`, `query()`).
+### Credential Management
+
+- Store your Firebase Admin SDK credentials securely using the `FIREBASE_CREDENTIALS` environment variable
+- Never commit credentials to version control
+- Use Laravel's encrypted environment files for sensitive data in production
+
+### Production Best Practices
+
+- Implement rate limiting on authentication endpoints
+- Enable Firebase security rules for additional protection
+- Cache user queries where appropriate to reduce API calls
+- Monitor Firebase usage to stay within quota limits
+- Regularly audit user permissions and custom claims
+
+### Validation
+
+Always validate user input before passing to Firebase:
+
+```php
+$validated = $request->validate([
+    'email'    => 'required|email',
+    'password' => 'required|min:8',
+    'name'     => 'required|string|max:255',
+]);
+
+$user = Fauth::create($validated);
+```
+
+## Advanced Configuration
+
+### Custom Attribute Mapping
+
+You can customize how local attributes map to Firebase fields:
+
+```php
+protected array $fauth_mapping = [
+    'full_name'     => 'displayName',
+    'email_address' => 'email',
+    'mobile'        => 'phoneNumber',
+    'profile_pic'   => 'photoURL',
+    'user_options'  => 'customClaims',
+];
+```
+
+### Custom UID Column
+
+If you use a different column name for storing Firebase UIDs:
+
+```php
+public function getFauthKeyName(): string
+{
+    return 'firebase_id'; // Instead of 'uid'
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue**: `Class 'Fauth' not found`
+- Ensure the package is installed: `composer require bright/fauth`
+- Clear Laravel's config cache: `php artisan config:clear`
+
+**Issue**: Authentication always fails
+- Verify your Firebase Admin SDK credentials are correct
+- Check that the `kreait/laravel-firebase` package is properly configured
+- Ensure your Firebase project has Email/Password authentication enabled
+
+**Issue**: Users not syncing with Firebase
+- Verify the `HasFauth` and `HasFauthAttributes` traits are added to your model
+- Check that the `uid` column exists in your database
+- Ensure the `fauth_mapping` array includes all required fields
 
 ## Contributing
 
-PRs and issues are welcome! Keep it Laravel-friendly:
+We welcome contributions! To contribute:
 
--   Clear, small changes
--   Tests with **Pest**
--   Prefer `FauthFake` in tests (no network calls)
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes with clear, descriptive commits
+4. Write or update tests as needed
+5. Ensure all tests pass: `composer test`
+6. Submit a pull request with a detailed description
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/GoBrightApps/fauth.git
+
+# Install dependencies
+composer install
+
+# Run tests
+composer test
+composer lint # linting
+composer test:types # strict types (PHPStan)
+```
 
 ## License
 
-MIT License © [Bright](https://bright.it)
+This package is open-sourced software licensed under the [MIT license](LICENSE.md).
+
+## Credits
+
+Developed and maintained by [Bright](https://bright.it)
+
+Built on top of the excellent [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase) package.
+
+## Support
+
+- **Documentation**: [GitHub Wiki](https://github.com/GoBrightApps/fauth/wiki)
+- **Issues**: [GitHub Issues](https://github.com/GoBrightApps/fauth/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/GoBrightApps/fauth/discussions)
+
+---
+
+<p align="center">Made with ❤️ by <a href="https://bright.it">Bright</a></p>

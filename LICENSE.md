@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) Bright IT <https://www.bright.it>
+Copyright (c) Bright <https://www.bright.it>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
