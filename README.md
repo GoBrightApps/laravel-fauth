@@ -2,9 +2,9 @@
 
 <p align="center">
     <a href="https://github.com/GoBrightApps/fauth/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/fauth/tests.yml?branch=main&label=tests&style=round-square"></a>
-    <a href="https://packagist.org/packages/bright/fauth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/fauth"></a>
-    <a href="https://packagist.org/packages/bright/fauth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/fauth"></a>
-    <a href="https://packagist.org/packages/bright/fauth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/fauth"></a>
+    <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/laravel-fauth"></a>
+    <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/laravel-fauth"></a>
+    <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/fauth"></a>
 </p>
 
 ## Overview
@@ -39,7 +39,7 @@ composer require kreait/laravel-firebase
 Then install Fauth:
 
 ```bash
-composer require bright/fauth
+composer require bright/laravel-fauth
 ```
 
 The package will be auto-discovered by Laravel.
@@ -463,7 +463,7 @@ public function getFauthKeyName(): string
 ### Common Issues
 
 **Issue**: `Class 'Fauth' not found`
-- Ensure the package is installed: `composer require bright/fauth`
+- Ensure the package is installed: `composer require bright/laravel-fauth`
 - Clear Laravel's config cache: `php artisan config:clear`
 
 **Issue**: Authentication always fails
