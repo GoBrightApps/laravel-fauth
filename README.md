@@ -1,10 +1,10 @@
 # Fauth - Firebase Authentication for Laravel
 
 <p align="center">
-    <a href="https://github.com/GoBrightApps/fauth/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/fauth/tests.yml?branch=main&label=tests&style=round-square"></a>
+    <a href="https://github.com/GoBrightApps/laravel-fauth/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/GoBrightApps/laravel-fauth/tests.yml?branch=main&label=tests&style=round-square"></a>
     <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/bright/laravel-fauth"></a>
     <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="Latest Version" src="https://img.shields.io/packagist/v/bright/laravel-fauth"></a>
-    <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/fauth"></a>
+    <a href="https://packagist.org/packages/bright/laravel-fauth"><img alt="License" src="https://img.shields.io/github/license/GoBrightApps/laravel-fauth"></a>
 </p>
 
 ## Overview
@@ -491,7 +491,7 @@ We welcome contributions! To contribute:
 
 ```bash
 # Clone the repository
-git clone https://github.com/GoBrightApps/fauth.git
+git clone https://github.com/GoBrightApps/laravel-fauth.git
 
 # Install dependencies
 composer install
@@ -514,9 +514,9 @@ Built on top of the excellent [kreait/laravel-firebase](https://github.com/kreai
 
 ## Support
 
-- **Documentation**: [GitHub Wiki](https://github.com/GoBrightApps/fauth/wiki)
-- **Issues**: [GitHub Issues](https://github.com/GoBrightApps/fauth/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/GoBrightApps/fauth/discussions)
+- **Documentation**: [GitHub Wiki](https://github.com/GoBrightApps/laravel-fauth/wiki)
+- **Issues**: [GitHub Issues](https://github.com/GoBrightApps/laravel-fauth/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/GoBrightApps/laravel-fauth/discussions)
 
 ---
 
