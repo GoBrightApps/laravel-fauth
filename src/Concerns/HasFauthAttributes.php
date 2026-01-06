@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bright\Fauth\Traits;
+namespace Bright\Fauth\Concerns;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 

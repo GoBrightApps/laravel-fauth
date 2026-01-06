@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bright\Fauth\Traits;
+namespace Bright\Fauth\Concerns;
 
 use Bright\Fauth\Facades\Fauth;
 use Bright\Fauth\Futils;
@@ -37,7 +37,7 @@ trait InteractsWithFauth
     {
         $callback = static function () use ($email): ?self {
             $record = Fauth::findByEmail($email);
-            $uid = $record ? $record->uid : null;
+            $uid    = $record ? $record->uid : null;
 
             return $uid ? static::findByUid($uid) : null;
         };
