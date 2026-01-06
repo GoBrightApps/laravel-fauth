@@ -1,5 +1,5 @@
 {
-    "name": "bright/firebase-laravel-auth",
+    "name": "bright/laravel-fauth",
     "description": "The Firebase auth package providing an authentication layer for Laravel.",
     "type": "library",
     "license": "MIT",
